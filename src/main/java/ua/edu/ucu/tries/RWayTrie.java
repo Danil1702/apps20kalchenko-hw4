@@ -26,7 +26,7 @@ public class RWayTrie implements Trie {
     @Override
     public void add(Tuple t) {
         Node current = root;
-        for(Character ch: t.term.toCharArray()) {
+        for (Character ch: t.term.toCharArray()) {
             if (!current.children.containsKey(ch)) {
                 Node newNode = new Node();
                 newNode.value = current.value.concat(String.valueOf(ch));
@@ -34,7 +34,7 @@ public class RWayTrie implements Trie {
             }
             current = current.children.get(ch);
         }
-        if (!current.isWord){
+        if (!current.isWord) {
             current.isWord = true;
             size++;
         }
