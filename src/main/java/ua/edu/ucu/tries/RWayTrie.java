@@ -5,9 +5,9 @@ import java.util.*;
 
 public class RWayTrie implements Trie {
     static class Node {
-        public Map<Character, Node> children;
-        public String value = "";
-        public boolean isWord;
+        protected Map<Character, Node> children;
+        protected String value = "";
+        protected boolean isWord;
 
         public Node() {
             children = new HashMap<>();
