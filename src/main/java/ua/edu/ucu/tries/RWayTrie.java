@@ -1,35 +1,97 @@
 package ua.edu.ucu.tries;
 
-public class RWayTrie implements Trie {
+import ua.edu.ucu.queue.Queue;
+import java.util.*;
 
-    @Override
-    public void add(Tuple t) {
-        throw new UnsupportedOperationException("Not supported yet.");
+public class RWayTrie implements Trie {
+    static class Node {
+        public Map<Character, Node> children;
+        public String value = "";
+        public boolean isWord;
+
+        public Node() {
+            children = new HashMap<>();
+            isWord = false;
+        }
+    }
+
+    private Node root;
+    private int size;
+
+    public RWayTrie() {
+        root = new Node();
+        size = 0;
     }
 
     @Override
-    public boolean contains(String word) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void add(Tuple t) {
+        Node current = root;
+        for(Character ch: t.term.toCharArray()) {
+            if (!current.children.containsKey(ch)) {
+                Node newNode = new Node();
+                newNode.value = current.value.concat(String.valueOf(ch));
+                current.children.put(ch, newNode);
+            }
+            current = current.children.get(ch);
+        }
+        if (!current.isWord){
+            current.isWord = true;
+            size++;
+        }
     }
 
     @Override
     public boolean delete(String word) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Node current = root;
+        for (Character ch: word.toCharArray()) {
+            current = current.children.get(ch);
+        }
+        current.isWord = false;
+        size--;
+        return true;
+    }
+
+    @Override
+    public boolean contains(String word) {
+        Node current = root;
+        for (Character ch: word.toCharArray()) {
+            if (!current.children.containsKey(ch)) {
+                return false;
+            }
+            current = current.children.get(ch);
+        }
+        return current.isWord;
     }
 
     @Override
     public Iterable<String> words() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return wordsWithPrefix("");
     }
 
     @Override
     public Iterable<String> wordsWithPrefix(String s) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Node current = root;
+        for (Character ch: s.toCharArray()) {
+            current = current.children.get(ch);
+        }
+        Queue queue = new Queue();
+        List<String> wordsFound = new ArrayList<>();
+        queue.enqueue(current);
+        while (!queue.isEmpty()) {
+            Node elem = (Node) queue.dequeue();
+            if (elem.isWord) {
+                wordsFound.add(elem.value);
+            }
+            for (Node node: elem.children.values()) {
+                queue.enqueue(node);
+            }
+        }
+        return wordsFound;
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return size;
     }
 
 }
