@@ -206,7 +206,7 @@ public class ImmutableLinkedList implements ImmutableList {
 
     private Node getNodeByIndex(int index) {
         Node current = getFirstNode();
-        for (int i = 0; i < index;i++) {
+        for (int i = 0; i < index; i++) {
             current = current.getNext();
         }
         return current;
